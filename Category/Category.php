@@ -9,9 +9,6 @@ if ($func) {
     if (strcmp($func, "del") == 0) {//elimnar
         $id = $_GET['id'];
         $categ->delete($id);
-        echo "<script type='text/javascript'>";
-        echo "alert('Se eliminó la categoría'')";
-        echo "</script>";
     } else if (strcmp($func, "insert") == 0) {//insertar
         $name = $_POST['name'];
         $categ->insert($name);
@@ -25,6 +22,18 @@ if ($func) {
 
 class Category {
 
+    public $id;
+    public $name;
+    
+     function __construct() {
+        
+    }
+
+    function __construct1($id, $name) {
+        $this->$id = $id;
+        $this->$name = $name;
+    }
+
     public function select() {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "SELECT id,name FROM category");
@@ -32,7 +41,16 @@ class Category {
             echo "Ha ocurrido un error.\n";
             exit;
         }
-        return $result;
+        $categories;
+        $num = 0;
+        while ($row = pg_fetch_row($result)) { //recuperar fila de un resultado
+            $id = $row[0];
+            $name = $row[1];
+            $category = new Category($id, $name);
+            $categories[$num] = $category;
+            $num++;
+        }
+        return $categories;
     }
 
     public function getDataToEdit($idD) {
