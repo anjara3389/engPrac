@@ -1,6 +1,6 @@
 <?php
 
-include("../DataBase/DBConnect.php");
+include_once("../DataBase/DBConnect.php");
 $func = "";
 $func = $_GET['func'];
 

@@ -1,13 +1,13 @@
 <?php
-$numPhra = "";
+$name = "";
 $isNew = !isset($_GET['id']);
-include("./Game.php");
+include("./Sentence.php");
 include("../Category/Category.php");
 if (!$isNew) {
     $id = $_GET['id'];
-    $game = new Game();
-    $numPhra = $game->getDataToEdit($id)[0];
-    $catId = $game->getDataToEdit($id)[1];
+    $sentence = new Sentence();
+    $name = $sentence->getDataToEdit($id)[0];
+    $catId = $sentence->getDataToEdit($id)[1];
 }
 $category = new Category();
 $categories = $category->select();
@@ -16,9 +16,9 @@ $categories = $category->select();
     <body>
         <form action=<?php
         if ($isNew) {
-            echo "./Game.php?func=insert";
+            echo "./Sentence.php?func=insert";
         } else {
-            echo "./Game.php?func=edit";
+            echo "./Sentence.php?func=edit";
         }
         ?> method="POST">
             <table>
@@ -26,8 +26,8 @@ $categories = $category->select();
                     <?php if (!$isNew) { ?> 
                     <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
                 <?php } ?>
-                <td>Num. Oraciones:</td> 
-                <td><input type="numeric" name="numPhra" id="numPhra" value="<?php echo $numPhra; ?>"></td> 
+                <td>Oración:</td> 
+                <td><input type="text" name="name" id="name" value="<?php echo $name; ?>"></td> 
                 <td>Categoría</td> 
                 <td>
                     <select name="cat" id="cat" value="<?php echo $catId; ?>" >
