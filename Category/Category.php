@@ -29,9 +29,9 @@ class Category {
         
     }
 
-    function __construct1($id, $name) {
-        $this->$id = $id;
-        $this->$name = $name;
+    public function setPars($id, $name) {
+        $this->id = $id;
+        $this->name = $name;
     }
 
     public function select() {
@@ -46,7 +46,8 @@ class Category {
         while ($row = pg_fetch_row($result)) { //recuperar fila de un resultado
             $id = $row[0];
             $name = $row[1];
-            $category = new Category($id, $name);
+            $category = new Category();
+            $category->setPars($id, $name);
             $categories[$num] = $category;
             $num++;
         }
