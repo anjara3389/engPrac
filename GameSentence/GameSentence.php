@@ -13,11 +13,11 @@ if ($func) {
         $numPhra = $_POST['numPhra'];
         $catId = $_POST['cat'];
         $game->insert($numPhra, $catId);
-        header('Location:./StartGame.php?cat='.$catId.'&numPhra='.$numPhra); //va a la pag Start game
+        header('Location:./StartGame.php?cat=$catId&numPhra=$numPhra'); //va a la pag Start game
     }
 }
 
-class Game {
+class GameSentence {
 
     public $id;
     public $numPhra;

@@ -35,7 +35,6 @@ ob_start();
                             <ul class="dropdown-menu">
                                 <li><a href="../Game/FrmGame.php">Nuevo</a></li>
                                 <li><a href="../Category/ListCategory.php">Categorías</a></li>
-                                <li><a href="../Sentence/ListSentences.php">Listados</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Estadísticas</a></li>
                             </ul>
