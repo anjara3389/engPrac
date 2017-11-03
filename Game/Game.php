@@ -1,6 +1,7 @@
 <?php
 
 include_once("../DataBase/DBConnect.php");
+include_once("../GameSentence/GameSentence.php");
 $func = "";
 $func = $_GET['func'];
 
@@ -13,7 +14,7 @@ if ($func) {
         $numPhra = $_POST['numPhra'];
         $catId = $_POST['cat'];
         $game->insert($numPhra, $catId);
-        header('Location:./StartGame.php?cat='.$catId.'&numPhra='.$numPhra); //va a la pag Start game
+        header('Location:./StartGame.php?cat=' . $catId . '&numPhra=' . $numPhra); //va a la pag Start game
     }
 }
 
@@ -75,11 +76,12 @@ class Game {
     public function insert($numPhraI, $catId) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "INSERT INTO game(num_phrases,category_id) VALUES($numPhraI,$catId)");
-        echo "INSERT INTO game(num_phrases,category_id) VALUES('$numPhraI',$catId)";
+
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
         }
+        startGame($catId, $numPhra);
         return $result;
     }
 
@@ -89,6 +91,21 @@ class Game {
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
+        }
+    }
+
+    public function startGame($catId, $numPhra) {
+        $connect = new DBConnect();
+        $sentence = new Sentence();
+        $phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
+        $curgame = pg_query($connect->getDB(), "SELECT currval('autoincrement_game')");
+        if (!$curgame) {
+            echo "Ha ocurrido un error.\n";
+            exit;
+        }
+        for ($i = 0; $i < count(phrases); $i++) {
+            $gameSentence = new GameSentence();
+            $gameSentence->insert($curgame, $phrases[$i]->id);
         }
     }
 

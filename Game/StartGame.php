@@ -1,20 +1,25 @@
 <?php
 include("../Menu/Menu.php");
 include("../Sentence/Sentence.php");
+$numPhra;
+$catId;
+$index;
 $numPhra = $_GET['numPhra'];
 $catId = $_GET['cat'];
-$sentence = new Sentence();
-$phases = $sentence->selectRamdomlyByCat($catId, $numPhra);
 $index = 0;
+$sentence = new Sentence();
+$phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
 
-function rightAnswer($index) {
-    $index++;
-    header('Location:./StartGame.php?$numPhra=' . $numPhra . '&cat=' . $catId);
+function rightAnswer() {
+    $GLOBALS['index'] = $GLOBALS['index'] ++;
+    $phrase = $GLOBALS['phrases'][$GLOBALS['index']]->spanish;
+    echo "javascript:reload($phrase,1);";
 }
 
-function wrongAnswer($index) {
-    $index++;
-    header('Location:./StartGame.php?$numPhra=' . $numPhra . '&cat=' . $catId);
+function wrongAnswer() {
+    $GLOBALS['index'] = $GLOBALS['index'] ++;
+    $phrase = $GLOBALS['phrases'][$GLOBALS['index']]->spanish;
+    echo "javascript:reload($phrase,1);";
 }
 ?>
 <html>
@@ -24,17 +29,48 @@ function wrongAnswer($index) {
             <br>
             <br>
             <table>
-                <tr><td colspan="4"><h2  class="game"id="spani" name="spani"><?php echo $phases[$index]->spanish; ?></h2></td></tr>
+                <tr><td colspan="4"><div id="spani" name="spani"></div></td></tr>
                 <tr><td><br> </td></tr>
-                <tr><td><button id="right" name="right" class="btn btn-default btn-lg" onclick="<?php rightAnswer($index); ?>"><span class="glyphicon glyphicon-ok"></span> Bien </button></td>
+                <tr><td><button id="right" name="right" class="btn btn-default btn-lg" onclick="<?php rightAnswer(); ?>"><span class="glyphicon glyphicon-ok"></span> Bien </button></td>
                     <td><button class="btn btn-default btn-lg gamer" id="ans" colspan="2" name="ans"><p class="an">Respuesta</p></button></td>
-                    <td><button class="btn btn-default btn-lg" id="wrong" name="wrong" onclick="<?php wrongAnswer($index); ?>"><span class="glyphicon glyphicon-remove"></span> Mal </button></td></tr>
+                    <td><button class="btn btn-default btn-lg" id="wrong" name="wrong" onclick="<?php wrongAnswer(); ?>"><span class="glyphicon glyphicon-remove"></span> Mal </button></td></tr>
                 <tr><td><br> </td></tr>
-                <tr><td colspan="4"><h2  class="game" id="engl" name="engls"><?php echo $phases[$index]->english; ?></h2></td></tr>
+                <tr><td colspan="4"><h2  class="game" id="engl" name="engls"><?php echo $phrases[$index]->english; ?></h2></td></tr>
             </table>
         </div>
     </body>
+    <script type="text/javascript">
 
-    
+
+
+        function reload(phrase, language) {
+                var id = language == 1?"spani":"engls"; // el div que quieres actualizar!
+                var url = "./Spanish.php?phrase=" + phrase;//a donde se va a dirigir
+            var xmlHttp; // The XMLHttpRequest object
+            try {
+                xmlHttp = new XMLHttpRequest(); // Firefox, Opera 8.0+, Safari
+            } catch (e) {
+                try {
+                    xmlHttp = new ActiveXObject("Msxml2.XMLHTTP"); // Internet Explorer
+                } catch (e) {
+                    try {
+                        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                        alert("Tu explorador no soporta AJAX.");
+                        return false;
+                    }
+                }
+            }
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.readyState != null) {
+                    document.getElementById(id).innerHTML = xmlHttp.responseText;
+                }
+            }
+            xmlHttp.open("GET", url, true);
+            xmlHttp.send(null);
+        }
+    </script>
+
+
 </html>
 
