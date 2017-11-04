@@ -1,6 +1,7 @@
 <?php
 
 include_once("../DataBase/DBConnect.php");
+include_once("../GameSentence/GameSentence.php");
 $func = "";
 $func = $_GET['func'];
 
@@ -12,14 +13,9 @@ if ($func) {
     } else if (strcmp($func, "insert") == 0) {//insertar
         $numPhra = $_POST['numPhra'];
         $catId = $_POST['cat'];
-        $game->insert($numPhra, $catId);
-    } else if (strcmp($func, "edit") == 0) {//editar
-        $id = $_POST['id'];
-        $numPhra = $_POST['numPhra'];
-        $catId = $_POST['cat'];
-        $game->edit($numPhra, $catId, $id);
+        $gameId = $game->insert($numPhra, $catId);
+        header('Location:./StartGame.php?cat=' . $catId . '&numPhra=' . $numPhra . '&gameId=' . $gameId); //va a la pag Start game
     }
-    header('Location:./ListGames.php '); //devuelve a la pág ListGame
 }
 
 class Game {
@@ -80,11 +76,12 @@ class Game {
     public function insert($numPhraI, $catId) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "INSERT INTO game(num_phrases,category_id) VALUES($numPhraI,$catId)");
-        echo "INSERT INTO game(num_phrases,category_id) VALUES('$numPhraI',$catId)";
+
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
         }
+       // startGame($catId, $numPhraI, $result);
         return $result;
     }
 
@@ -94,6 +91,25 @@ class Game {
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
+        }
+    }
+
+    public function getCurrGame() {
+        $connect = new DBConnect();
+        $curgame = pg_query($connect->getDB(), "SELECT currval('autoincrement_game')");
+        if (!$curgame) {
+            echo "Ha ocurrido un error.\n";
+            exit;
+        }
+        return $curgame;
+    }
+
+    public function startGame($catId, $numPhra, $curgame) {
+        $sentence = new Sentence();
+        $phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
+        for ($i = 0; $i < count(phrases); $i++) {
+            $gameSentence = new GameSentence();
+            $gameSentence->insert($curgame, $phrases[$i]->id);
         }
     }
 

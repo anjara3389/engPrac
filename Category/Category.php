@@ -56,7 +56,7 @@ class Category {
 
     public function getDataToEdit($idD) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "SELECT name FROM category WHERE id=" . $idD);
+        $result = pg_query($connect->getDB(), "SELECT name FROM category WHERE id=$idD");
         return pg_fetch_row($result)[0];
     }
 

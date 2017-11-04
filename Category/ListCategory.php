@@ -18,7 +18,7 @@ $categories = $categ->select();
                     <thead>
                         <tr>
                             <th>Categoría</th>
-                            <th colspan="2">Opciones</th>
+                            <th colspan="3">Opciones</th>
                         </tr>
                     <thead>
                         <?php
@@ -26,7 +26,7 @@ $categories = $categ->select();
                             $category = $categories[$i];
                             $id = $category->id;
                             $name = $category->name;
-                            echo "<tr><td>$name</td><td><a href='./FrmCategory.php?id=$id'>Editar</a></td><td><a id='del' name='del' onclick='javascript:deleteConfirmation($id);'>Eliminar</a></td></tr>";
+                            echo "<tr><td>$name</td><td><a href='../Sentence/ListSentences.php?categ=$id'>Oraciones</a></td><td><a href='./FrmCategory.php?id=$id'>Editar</a></td><td><a id='del' name='del' onclick='javascript:deleteConfirmation($id);'>Eliminar</a></td></tr>";
                         }
                     }
                     ?>

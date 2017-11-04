@@ -1,8 +1,12 @@
 <?php
 include("../Menu/Menu.php");
 include("./Sentence.php");
+include("../Category/Category.php");
 $sentence = new Sentence();
-$sentences = $sentence->select();
+$idCat = $_GET['categ'];
+$sentences = $sentence->select($idCat);
+$categ = new Category();
+$categ = $categ->getDataToEdit($idCat);
 ?>
 <html>
     <head>
@@ -16,9 +20,10 @@ $sentences = $sentence->select();
     </head>
     <body>
         <div class="container">
-            <h2>Oraciones</h2>
+
+            <h2><?php echo "Oraciones " . $categ; ?></h2>
             <br>
-            <a class="btn btn-default" href="./FrmSentence.php">Nuevo</a>
+            <a class="btn btn-default" href=<?php echo "./FrmSentence.php?categ=$idCat"; ?>>Nuevo</a>
             <br>
             <br>
             <table numPras="tableSentence" id="tableSentence" class="table table-striped">
@@ -26,16 +31,19 @@ $sentences = $sentence->select();
                 <?php if ($sentences) { ?>   
                     <thead>
                         <tr>
-                            <th>Oraciones</th>
-                            <th colspan="2">Opciones</th>
+                            <th>Inglès</th>
+                            <th>Español</th>
+                            <th colspan="3">Opciones</th>
                         </tr>
                     <thead> 
                         <?php
                         for ($i = 0; $i < count($sentences); $i++) {
                             $sentence = $sentences[$i];
                             $id = $sentence->id;
-                            $name = $sentence->name;
-                            echo "<tr><td>$name</td><td><a href='./FrmSentence.php?id=$id'>Editar</a></td><td><a id='del' name='del' href='./Sentence.php?id=$id&func=del'>Eliminar</a></td></tr>";
+                            $english = $sentence->english;
+                            $spanish = $sentence->spanish;
+                            $catId = $sentence->catId;
+                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' href='./Sentence.php?id=$id&cat=$catId&func=del'>Eliminar</a></td></tr>";
                         }
                     }
                     ?>
