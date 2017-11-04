@@ -93,11 +93,9 @@ class Sentence {
 
     public function getDataToEdit($idD) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "SELECT english,spanish,category_id FROM sentence WHERE id=" . $idD);
-        $data[0] = pg_fetch_row($result)[0];
-        $data[1] = pg_fetch_row($result)[1];
-        $data[2] = pg_fetch_row($result)[2];
-        return $data;
+        $result = pg_query($connect->getDB(), "SELECT id,english,spanish,category_id FROM sentence WHERE id=" . $idD);
+        $sentence = new Sentence(pg_fetch_row($result)[0], pg_fetch_row($result)[1], pg_fetch_row($result)[2], pg_fetch_row($result)[3]);
+        return $sentence;
     }
 
     public function delete($idD) {

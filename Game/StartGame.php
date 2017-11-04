@@ -1,25 +1,24 @@
 <?php
 include("../Menu/Menu.php");
 include("../Sentence/Sentence.php");
-$numPhra;
-$catId;
-$index;
-$numPhra = $_GET['numPhra'];
-$catId = $_GET['cat'];
-$index = 0;
-$sentence = new Sentence();
-$phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
+include("../Game/Game.php");
 
-function rightAnswer() {
-    $GLOBALS['index'] = $GLOBALS['index'] ++;
-    $phrase = $GLOBALS['phrases'][$GLOBALS['index']]->spanish;
-    echo "javascript:reload($phrase,1);";
-}
+$game = new Game();
+$currGame = $_GET['gameId'];
 
-function wrongAnswer() {
-    $GLOBALS['index'] = $GLOBALS['index'] ++;
-    $phrase = $GLOBALS['phrases'][$GLOBALS['index']]->spanish;
-    echo "javascript:reload($phrase,1);";
+//$numPhra;
+//$catId;
+//$index;
+//$numPhra = $_GET['numPhra'];
+//$catId = $_GET['cat'];
+//$index = 0;
+//$sentence = new Sentence();
+//$phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
+
+function answer($right) {
+    //$GLOBALS['index'] = $GLOBALS['index'] ++;
+    //$phrase = $GLOBALS['phrases'][$GLOBALS['index']]->spanish;
+    //echo "javascript:reload($phrase,1);";
 }
 ?>
 <html>
@@ -31,11 +30,11 @@ function wrongAnswer() {
             <table>
                 <tr><td colspan="4"><div id="spani" name="spani"></div></td></tr>
                 <tr><td><br> </td></tr>
-                <tr><td><button id="right" name="right" class="btn btn-default btn-lg" onclick="<?php rightAnswer(); ?>"><span class="glyphicon glyphicon-ok"></span> Bien </button></td>
+                <tr><td><button id="right" name="right" class="btn btn-default btn-lg" onclick="<?php //answer(true); ?>"><span class="glyphicon glyphicon-ok"></span> Bien </button></td>
                     <td><button class="btn btn-default btn-lg gamer" id="ans" colspan="2" name="ans"><p class="an">Respuesta</p></button></td>
-                    <td><button class="btn btn-default btn-lg" id="wrong" name="wrong" onclick="<?php wrongAnswer(); ?>"><span class="glyphicon glyphicon-remove"></span> Mal </button></td></tr>
+                    <td><button class="btn btn-default btn-lg" id="wrong" name="wrong" onclick="<?php //answer(false); ?>"><span class="glyphicon glyphicon-remove"></span> Mal </button></td></tr>
                 <tr><td><br> </td></tr>
-                <tr><td colspan="4"><h2  class="game" id="engl" name="engls"><?php echo $phrases[$index]->english; ?></h2></td></tr>
+                <tr><td colspan="4"><h2  class="game" id="engl" name="engls"><?php// echo $phrases[$index]->english; ?></h2></td></tr>
             </table>
         </div>
     </body>
@@ -44,8 +43,8 @@ function wrongAnswer() {
 
 
         function reload(phrase, language) {
-                var id = language == 1?"spani":"engls"; // el div que quieres actualizar!
-                var url = "./Spanish.php?phrase=" + phrase;//a donde se va a dirigir
+            var id = language == 1 ? "spani" : "engls"; // el div que quieres actualizar!
+            var url = "./Spanish.php?phrase=" + phrase;//a donde se va a dirigir
             var xmlHttp; // The XMLHttpRequest object
             try {
                 xmlHttp = new XMLHttpRequest(); // Firefox, Opera 8.0+, Safari

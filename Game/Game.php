@@ -13,8 +13,8 @@ if ($func) {
     } else if (strcmp($func, "insert") == 0) {//insertar
         $numPhra = $_POST['numPhra'];
         $catId = $_POST['cat'];
-        $game->insert($numPhra, $catId);
-        header('Location:./StartGame.php?cat=' . $catId . '&numPhra=' . $numPhra); //va a la pag Start game
+        $gameId = $game->insert($numPhra, $catId);
+        header('Location:./StartGame.php?cat=' . $catId . '&numPhra=' . $numPhra . '&gameId=' . $gameId); //va a la pag Start game
     }
 }
 
@@ -81,7 +81,7 @@ class Game {
             echo "Ha ocurrido un error.\n";
             exit;
         }
-        startGame($catId, $numPhra);
+       // startGame($catId, $numPhraI, $result);
         return $result;
     }
 
@@ -94,15 +94,19 @@ class Game {
         }
     }
 
-    public function startGame($catId, $numPhra) {
+    public function getCurrGame() {
         $connect = new DBConnect();
-        $sentence = new Sentence();
-        $phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
         $curgame = pg_query($connect->getDB(), "SELECT currval('autoincrement_game')");
         if (!$curgame) {
             echo "Ha ocurrido un error.\n";
             exit;
         }
+        return $curgame;
+    }
+
+    public function startGame($catId, $numPhra, $curgame) {
+        $sentence = new Sentence();
+        $phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
         for ($i = 0; $i < count(phrases); $i++) {
             $gameSentence = new GameSentence();
             $gameSentence->insert($curgame, $phrases[$i]->id);
