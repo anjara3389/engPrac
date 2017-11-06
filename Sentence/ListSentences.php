@@ -43,7 +43,7 @@ $categ = $categ->getDataToEdit($idCat);
                             $english = $sentence->english;
                             $spanish = $sentence->spanish;
                             $catId = $sentence->catId;
-                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' href='./Sentence.php?id=$id&cat=$catId&func=del'>Eliminar</a></td></tr>";
+                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' href='./Sentence.php?id=$id&cat=$catId&funcSe=del'>Eliminar</a></td></tr>";
                         }
                     }
                     ?>

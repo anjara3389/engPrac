@@ -28,10 +28,7 @@ $categories = $category->select();
             <br>
             <br>
             <button type="submit" class="btn btn-default">Iniciar</button>
-
         </form>
-
-
     </body>
 
 </html>

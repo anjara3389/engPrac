@@ -22,9 +22,9 @@ $categories = $category->select();
     <body>
         <form action=<?php
         if ($isNew) {
-            echo "./Sentence.php?func=insert";
+            echo "./Sentence.php?funcSe=insert";
         } else {
-            echo "./Sentence.php?func=edit";
+            echo "./Sentence.php?funcSe=edit";
         }
         ?> method="POST" >
             <h2>Agregar oración</h2>

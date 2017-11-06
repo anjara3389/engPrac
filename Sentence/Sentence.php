@@ -2,7 +2,7 @@
 
 include_once("../DataBase/DBConnect.php");
 $func = "";
-$func = $_GET['func'];
+$func = $_GET['funcSe'];
 
 if ($func) {
     $sentence = new Sentence();
