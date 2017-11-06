@@ -51,21 +51,11 @@ class GameSentence {
         return $result;
     }
 
-    public function getMaxGameSentence($gameId) {
-        $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "SELECT MAX(gss.id) "
-                . "FROM game_sentence gss "
-                . "WHERE gss.game_id" . $gameId . " AND right<>NULL");
-        return pg_fetch_row($result)[0];
-    }
-
     public function getNextSentence($gameId) {
         $connect = new DBConnect();
-        $maxGameSentence = getMaxGameSentence($gameId);
-
-        $result = pg_query($connect->getDB(), "SELECT gs.id "
+        $result = pg_query($connect->getDB(), "SELECT MIN(gs.id)"
                 . "FROM game_sentence gs "
-                . "WHERE gs.id=" . $maxGameSentence);
+                . "WHERE gs.game_id=" . $gameId . " AND right IS NULL");
         $sentenceId = pg_fetch_row($result)[0];
         $sentence = new Sentence();
         return $sentence->getDataToEdit($sentenceId);

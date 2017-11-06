@@ -75,14 +75,14 @@ class Game {
 
     public function insert($numPhraI, $catId) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "INSERT INTO game(num_phrases,category_id) VALUES($numPhraI,$catId)");
-
+        $result = pg_query($connect->getDB(), "INSERT INTO game(num_phrases,category_id) VALUES($numPhraI,$catId) RETURNING id");
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
         }
-       // startGame($catId, $numPhraI, $result);
-        return $result;
+        $data = pg_fetch_array($result);
+        $this->startGame($catId, $numPhraI, $data[0]);
+        return $data[0]; //retorna el id
     }
 
     public function edit($numPhraE, $categId, $idE) {
