@@ -80,4 +80,20 @@ class GameSentence {
         return $punct;
     }
 
+    public function getStatistics($sentenceId) {
+        $connect = new DBConnect();
+        $result = pg_query($connect->getDB(), "SELECT COUNT(*),(SELECT COUNT(*) "
+                . "FROM game_sentence gss "
+                . "WHERE gss.sentence_id=" . $sentenceId . " "
+                . "AND gss.is_right) "
+                . "FROM game_sentence gs "
+                . "WHERE gs.is_right IS NOT NULL "
+                . "AND gs.sentence_id = " . $sentenceId);
+        $row = pg_fetch_row($result);
+
+        $stat[0] = $row[0];
+        $stat[1] = $row[1];
+        return $stat;
+    }
+
 }

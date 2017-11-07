@@ -20,6 +20,8 @@ if (!$isNew) {
                         alert('Escriba nombre');
                         return;
                     }
+                    $("#catForm").submit();
+
                 });
             });
 
@@ -29,7 +31,7 @@ if (!$isNew) {
 
     </head>
     <body>
-        <form action=<?php
+        <form id="catForm" name="catForm" action=<?php
         if ($isNew) {
             echo "./Category.php?func=insert";
         } else {
@@ -51,10 +53,10 @@ if (!$isNew) {
             </div>
             <br>
             <br>
-            <button id="ok" name="ok" type="submit" class="btn btn-default">Guardar</button>
-
-
+            <button id="ok" type="button" name="ok" class="btn btn-default">Guardar</button>
         </form>
+
+
 
 
     </body>

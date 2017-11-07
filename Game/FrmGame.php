@@ -34,12 +34,15 @@ $categories = $category->select(true);
                         return;
                     }
                     if ($("#numPhra").val() > $("#maxi").html()) {
-                        alert('El valor ingresado excede num. de oraciones'+$("#numPhra").val()+"  "+$("#maxi").html());
+                        alert('El valor ingresado excede num. de oraciones existentes');
                         return;
                     }
+                    if ($("#numPhra").val() <= 0) {
+                        alert('Número no válido');
+                        return;
+                    }
+                    $("#formGame").submit();
                 });
-
-
                 $("#cat").change(function () {
                     var req = {
                         categ: $("#cat").val(),
@@ -62,11 +65,9 @@ $categories = $category->select(true);
 
 
         </script>
-
-
     </head>
     <body>
-        <form action=<?php echo "./Game.php?func=insert"; ?> method="POST">
+        <form id="formGame" name="formGame" action=<?php echo "./Game.php?func=insert"; ?> method="POST">
             <br>
             <br>
             <h2>Nuevo juego</h2>
@@ -87,7 +88,7 @@ $categories = $category->select(true);
             </div>
             <br>
             <br>
-            <button name="start" id="start" type="submit" class="btn btn-default">Iniciar</button>
+            <button name="start" id="start" type="button" class="btn btn-default">Iniciar</button>
         </form>
     </body>
 

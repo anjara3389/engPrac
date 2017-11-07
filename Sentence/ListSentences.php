@@ -2,6 +2,8 @@
 include("../Menu/Menu.php");
 include("./Sentence.php");
 include("../Category/Category.php");
+include("../GameSentence/GameSentence.php");
+
 $sentence = new Sentence();
 $idCat = $_GET['categ'];
 $sentences = $sentence->select($idCat);
@@ -33,6 +35,8 @@ $categ = $categ->getDataToEdit($idCat);
                         <tr>
                             <th>Inglès</th>
                             <th>Español</th>
+                            <th>Aciertos</th>
+                            <th>Juegos</th>
                             <th colspan="3">Opciones</th>
                         </tr>
                     <thead> 
@@ -43,7 +47,9 @@ $categ = $categ->getDataToEdit($idCat);
                             $english = $sentence->english;
                             $spanish = $sentence->spanish;
                             $catId = $sentence->catId;
-                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' onClick='javascript:deleteConfirmation($id,$catId)'>Eliminar</a></td></tr>";
+                            $gamSe = new GameSentence();
+                            $resut = $gamSe->getStatistics($id);
+                            echo "<tr><td>$english</td><td>$spanish</td><td>$resut[1]</td><td>$resut[0]</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' onClick='javascript:deleteConfirmation($id,$catId)'>Eliminar</a></td></tr>";
                         }
                     }
                     ?>
