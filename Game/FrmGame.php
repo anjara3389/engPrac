@@ -4,18 +4,74 @@ include("../Menu/Menu.php");
 include("./Game.php");
 include("../Category/Category.php");
 $category = new Category();
-$categories = $category->select();
+$categories = $category->select(true);
 ?>
 <html>
+    <head>
+        <script src="../jquery-3.2.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var req = {
+                    categ: $("#cat").val(),
+                }
+
+                $.ajax({
+                    url: 'getNumSentByCat.php',
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#maxi').html(data.numSent);
+                        $('#numPhra').attr(data.numSent);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
+                    },
+                    data: req
+                });
+                $("#start").click(function () {
+                    if ($("#numPhra").val() == '') {
+                        alert('Escriba núm. de oraciones');
+                        return;
+                    }
+                    if ($("#numPhra").val() > $("#maxi").html()) {
+                        alert('El valor ingresado excede num. de oraciones'+$("#numPhra").val()+"  "+$("#maxi").html());
+                        return;
+                    }
+                });
+
+
+                $("#cat").change(function () {
+                    var req = {
+                        categ: $("#cat").val(),
+                    }
+                    $.ajax({
+                        url: 'getNumSentByCat.php',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#maxi').html(data.numSent);
+                            $('#numPhra').attr(data.numSent);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
+                        },
+                        data: req
+                    });
+                });
+            });
+
+
+        </script>
+
+
+    </head>
     <body>
-        <form action=<?php echo "./Game.php?func=insert";?> method="POST">
+        <form action=<?php echo "./Game.php?func=insert"; ?> method="POST">
+            <br>
+            <br>
             <h2>Nuevo juego</h2>
             <br>
             <br>
-            <div class="form-group">
-                <label for="numPhra">Num. Oraciones:</label>
-                <input type="number" name="numPhra" class="form-control"id="numPhra">
-            </div>
             <div class="form-group">
                 <label for="cat">Categoría</label>
                 <select name="cat" id="cat" class="form-control">
@@ -24,10 +80,14 @@ $categories = $category->select();
                     <?php } ?>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="numPhra">Num. Oraciones:</label>
+                <input type="number" name="numPhra" min="1" max="<?php echo $category->getNumSentences($catId); ?>" placeholder="Ingrese número de oraciones" class="form-control"id="numPhra">Max. <p id="maxi" name="maxi">[Max]</p>
 
+            </div>
             <br>
             <br>
-            <button type="submit" class="btn btn-default">Iniciar</button>
+            <button name="start" id="start" type="submit" class="btn btn-default">Iniciar</button>
         </form>
     </body>
 

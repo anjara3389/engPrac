@@ -2,27 +2,28 @@
 
 include_once("../DataBase/DBConnect.php");
 $func = "";
-$func = $_GET['funcSe'];
-
-if ($func) {
-    $sentence = new Sentence();
-    if (strcmp($func, "del") == 0) {//elimnar
-        $id = $_GET['id'];
-        $catId = $_GET['cat'];
-        $sentence->delete($id);
-    } else if (strcmp($func, "insert") == 0) {//insertar
-        $english = $_POST['english'];
-        $spanish = $_POST['spanish'];
-        $catId = $_POST['cat'];
-        $sentence->insert($english, $spanish, $catId);
-    } else if (strcmp($func, "edit") == 0) {//editar
-        $id = $_POST['id'];
-        $english = $_POST['english'];
-        $spanish = $_POST['spanish'];
-        $catId = $_POST['cat'];
-        $sentence->edit($english, $spanish, $catId, $id);
+if (isset($_GET['funcSe'])) {
+    $func = $_GET['funcSe'];
+    if ($func) {
+        $sentence = new Sentence();
+        if (strcmp($func, "del") == 0) {//elimnar
+            $id = $_GET['id'];
+            $catId = $_GET['cat'];
+            $sentence->delete($id);
+        } else if (strcmp($func, "insert") == 0) {//insertar
+            $english = $_POST['english'];
+            $spanish = $_POST['spanish'];
+            $catId = $_POST['cat'];
+            $sentence->insert($english, $spanish, $catId);
+        } else if (strcmp($func, "edit") == 0) {//editar
+            $id = $_POST['id'];
+            $english = $_POST['english'];
+            $spanish = $_POST['spanish'];
+            $catId = $_POST['cat'];
+            $sentence->edit($english, $spanish, $catId, $id);
+        }
+        header('Location:./ListSentences.php?categ=' . $catId); //devuelve a la pág ListSentence
     }
-    header('Location:./ListSentences.php?categ=' . $catId); //devuelve a la pág ListSentence
 }
 
 class Sentence {
@@ -60,8 +61,9 @@ class Sentence {
             $sentence->setPars($id, $english, $spanish, $catId);
             $sentences[$num] = $sentence;
             $num++;
-        }
-        return $sentences;
+        }if (isset($sentences)) {
+            return $sentences;
+        } 
     }
 
     public function selectRamdomlyByCat($idCat, $numPhra) {
@@ -94,7 +96,12 @@ class Sentence {
     public function getDataToEdit($idD) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "SELECT id,english,spanish,category_id FROM sentence WHERE id=" . $idD);
-        $sentence = new Sentence(pg_fetch_row($result)[0], pg_fetch_row($result)[1], pg_fetch_row($result)[2], pg_fetch_row($result)[3]);
+        $sentence = new Sentence();
+        $data = pg_fetch_row($result);
+        $sentence->id = $data[0];
+        $sentence->english = $data[1];
+        $sentence->spanish = $data[2];
+        $sentence->catId = $data[3];
         return $sentence;
     }
 
@@ -128,29 +135,3 @@ class Sentence {
     }
 
 }
-
-/*
- * 
- * 
- *  public function selectRamdomlyByCat($idCat, $numPhra) {
-        $sentences = $this->select($idCat);
-        $randomNumList;
-        $randomSentences;
-        for ($i = 0; $i < $numPhra; $i++) {
-            do {
-                $repeated = false;
-                
-                $randNum = rand(0, count($sentences) - 1); //numero random
-                
-                $repeated = isRepeated($randNum, $randomNumList);
-                if ($repeated == false) {
-                    $randomNumList[$i] = $randNum;
-                }
-            } while ($found == true);
-
-            $randomSentences[$i] = $sentences[$randomNumList[$i]];
-        }
-        return $randomSentences;
-    }
-
- */

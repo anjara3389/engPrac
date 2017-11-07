@@ -3,7 +3,7 @@ include("../Menu/Menu.php");
 include("./Category.php");
 
 $categ = new Category();
-$categories = $categ->select();
+$categories = $categ->select(false);
 ?>
 <html>
     <body>
