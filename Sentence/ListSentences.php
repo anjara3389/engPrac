@@ -23,7 +23,7 @@ $categ = $categ->getDataToEdit($idCat);
 
             <h2><?php echo "Oraciones " . $categ; ?></h2>
             <br>
-            <a class="btn btn-default" href=<?php echo "./FrmSentence.php?categ=$idCat"; ?>>Nuevo</a>
+            <a class="btn btn-default" href=<?php echo "./FrmSentence.php?categ=$idCat"; ?>>Nueva</a>
             <br>
             <br>
             <table numPras="tableSentence" id="tableSentence" class="table table-striped">
@@ -43,11 +43,18 @@ $categ = $categ->getDataToEdit($idCat);
                             $english = $sentence->english;
                             $spanish = $sentence->spanish;
                             $catId = $sentence->catId;
-                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' href='./Sentence.php?id=$id&cat=$catId&funcSe=del'>Eliminar</a></td></tr>";
+                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' onClick='javascript:deleteConfirmation($id,$catId)'>Eliminar</a></td></tr>";
                         }
                     }
                     ?>
             </table>
         </div>
     </body>
+    <script type="text/javascript">
+        function deleteConfirmation(idD, catId) {
+            if (confirm("Desea eliminar la oración?")) {
+                window.location = "./Sentence.php?id=" + idD + "&cat=" + catId + "&funcSe=del";
+            }
+        }
+    </script>
 </html>

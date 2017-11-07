@@ -3,18 +3,20 @@
 include_once("../DataBase/DBConnect.php");
 include_once("../GameSentence/GameSentence.php");
 $func = "";
-$func = $_GET['func'];
+if (isset($_GET['func'])) {
+    $func = $_GET['func'];
 
-if ($func) {
-    $game = new Game();
-    if (strcmp($func, "del") == 0) {//elimnar
-        $id = $_GET['id'];
-        $game->delete($id);
-    } else if (strcmp($func, "insert") == 0) {//insertar
-        $numPhra = $_POST['numPhra'];
-        $catId = $_POST['cat'];
-        $gameId = $game->insert($numPhra, $catId);
-        header('Location:./StartGame.php?cat=' . $catId . '&numPhra=' . $numPhra . '&gameId=' . $gameId); //va a la pag Start game
+    if ($func) {
+        $game = new Game();
+        if (strcmp($func, "del") == 0) {//elimnar
+            $id = $_GET['id'];
+            $game->delete($id);
+        } else if (strcmp($func, "insert") == 0) {//insertar
+            $numPhra = $_POST['numPhra'];
+            $catId = $_POST['cat'];
+            $gameId = $game->insert($numPhra, $catId);
+            header('Location:./StartGame.php?cat=' . $catId . '&numPhra=' . $numPhra . '&gameId=' . $gameId); //va a la pag Start game
+        }
     }
 }
 
@@ -107,7 +109,7 @@ class Game {
     public function startGame($catId, $numPhra, $curgame) {
         $sentence = new Sentence();
         $phrases = $sentence->selectRamdomlyByCat($catId, $numPhra);
-        for ($i = 0; $i < count(phrases); $i++) {
+        for ($i = 0; $i < count($phrases); $i++) {
             $gameSentence = new GameSentence();
             $gameSentence->insert($curgame, $phrases[$i]->id);
         }
