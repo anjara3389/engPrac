@@ -14,22 +14,38 @@ if (!$isNew) {
         <script src="../jquery-3.2.1.min.js"></script>
         <script>
             $(document).ready(function () {
-
                 $("#ok").click(function () {
                     if ($("#name").val() == '') {
                         alert('Escriba nombre');
                         return;
                     }
+                    var req = {
+                        name: $("#name").val(),
+                        id: $("#id").val(),
+                    }
+                    $.ajax({
+                        url: 'ValidationCategory.php',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.right) {
+                                $("#catForm").submit();
+                            } else {
+                                alert("Error: " + data.excep);
+                            }
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
+                        },
+                        data: req
+                    });
                 });
             });
 
 
         </script>
-
-
     </head>
     <body>
-        <form action=<?php
+        <form id="catForm" name="catForm" action=<?php
         if ($isNew) {
             echo "./Category.php?func=insert";
         } else {
@@ -51,12 +67,8 @@ if (!$isNew) {
             </div>
             <br>
             <br>
-            <button id="ok" name="ok" type="submit" class="btn btn-default">Guardar</button>
-
-
+            <button id="ok" type="button" name="ok" class="btn btn-default">Guardar</button>
         </form>
-
-
     </body>
 
 </html>

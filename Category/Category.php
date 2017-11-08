@@ -1,6 +1,7 @@
 <?php
 
 include_once("../DataBase/DBConnect.php");
+include_once("../Sentence/Sentence.php");
 $func = "";
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
@@ -38,7 +39,7 @@ class Category {
 
     public function select($sentenc) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "SELECT c.id,c.name FROM category c " . (!$sentenc ? "" : "WHERE c.id IN(SELECT s.category_id FROM sentence s)"));
+        $result = pg_query($connect->getDB(), "SELECT c.id,c.name FROM category c WHERE active " . (!$sentenc ? "" : "AND c.id IN(SELECT s.category_id FROM sentence s) "));
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
@@ -66,7 +67,9 @@ class Category {
 
     public function delete($idD) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "DELETE FROM category WHERE id=" . $idD);
+        $result = pg_query($connect->getDB(), "UPDATE category SET active=false WHERE id=" . $idD);
+        $sentenc = new Sentence();
+        $sentenc->delete(null, $idD);
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
@@ -93,10 +96,17 @@ class Category {
         }
     }
 
+    //retorna el numero de oraciones que tiene una caegoría
     public function getNumSentences($idD) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "SELECT COUNT(*) FROM sentence WHERE category_id=$idD");
         return pg_fetch_row($result)[0];
+    }
+
+    public function validateName($name, $idC) {
+        $connect = new DBConnect();
+        $result = pg_query($connect->getDB(), "SELECT COUNT(*) FROM category WHERE name LIKE '$name' " . ($idC != null ? "AND id<>$idC)" : ""));
+        return (pg_fetch_row($result)[0] == 0);
     }
 
 }

@@ -2,6 +2,8 @@
 include("../Menu/Menu.php");
 include("./Sentence.php");
 include("../Category/Category.php");
+include("../GameSentence/GameSentence.php");
+
 $sentence = new Sentence();
 $idCat = $_GET['categ'];
 $sentences = $sentence->select($idCat);
@@ -10,8 +12,6 @@ $categ = $categ->getDataToEdit($idCat);
 ?>
 <html>
     <head>
-        <script type="text/javascript" src="./Sentence.js"></script>
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compa]ble" content="IE=edge">
         <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,7 +23,7 @@ $categ = $categ->getDataToEdit($idCat);
 
             <h2><?php echo "Oraciones " . $categ; ?></h2>
             <br>
-            <a class="btn btn-default" href=<?php echo "./FrmSentence.php?categ=$idCat"; ?>>Nueva</a>
+            <a class="btn btn-default" href=<?php echo "./FrmSentence.php?categ=$idCat"; ?>><span class='glyphicon glyphicon-plus'></span> Nueva</a>
             <br>
             <br>
             <table numPras="tableSentence" id="tableSentence" class="table table-striped">
@@ -33,6 +33,8 @@ $categ = $categ->getDataToEdit($idCat);
                         <tr>
                             <th>Inglès</th>
                             <th>Español</th>
+                            <th>Aciertos</th>
+                            <th>Juegos</th>
                             <th colspan="3">Opciones</th>
                         </tr>
                     <thead> 
@@ -43,7 +45,9 @@ $categ = $categ->getDataToEdit($idCat);
                             $english = $sentence->english;
                             $spanish = $sentence->spanish;
                             $catId = $sentence->catId;
-                            echo "<tr><td>$english</td><td>$spanish</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'>Editar</a></td><td><a id='del' name='del' onClick='javascript:deleteConfirmation($id,$catId)'>Eliminar</a></td></tr>";
+                            $gamSe = new GameSentence();
+                            $resut = $gamSe->getStatistics($id);
+                            echo "<tr><td>$english</td><td>$spanish</td><td>$resut[1]</td><td>$resut[0]</td><td><a href='./FrmSentence.php?id=$id&categ=$catId'><span class='glyphicon glyphicon-pencil'></span> Editar</a></td><td><a id='del' name='del' onClick='javascript:deleteConfirmation($id,$catId)'><span class='glyphicon glyphicon-remove'></span>Eliminar</a></td></tr>";
                         }
                     }
                     ?>

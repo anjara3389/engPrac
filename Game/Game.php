@@ -8,10 +8,7 @@ if (isset($_GET['func'])) {
 
     if ($func) {
         $game = new Game();
-        if (strcmp($func, "del") == 0) {//elimnar
-            $id = $_GET['id'];
-            $game->delete($id);
-        } else if (strcmp($func, "insert") == 0) {//insertar
+        if (strcmp($func, "insert") == 0) {//insertar
             $numPhra = $_POST['numPhra'];
             $catId = $_POST['cat'];
             $gameId = $game->insert($numPhra, $catId);
@@ -65,16 +62,6 @@ class Game {
         return $data;
     }
 
-    public function delete($idD) {
-        $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "DELETE FROM game WHERE id=" . $idD);
-        if (!$result) {
-            echo "Ha ocurrido un error.\n";
-            exit;
-        }
-        return $result;
-    }
-
     public function insert($numPhraI, $catId) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "INSERT INTO game(num_phrases,category_id) VALUES($numPhraI,$catId) RETURNING id");
@@ -87,15 +74,7 @@ class Game {
         return $data[0]; //retorna el id
     }
 
-    public function edit($numPhraE, $categId, $idE) {
-        $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "UPDATE game SET num_phrases=" . $numPhraE . ",category_id=" . $categId . " WHERE id=" . $idE);
-        if (!$result) {
-            echo "Ha ocurrido un error.\n";
-            exit;
-        }
-    }
-
+    //da el id del juego actual
     public function getCurrGame() {
         $connect = new DBConnect();
         $curgame = pg_query($connect->getDB(), "SELECT currval('autoincrement_game')");
@@ -105,6 +84,12 @@ class Game {
         }
         return $curgame;
     }
+
+    /* Inicia juego eligiendo frases al azar dentro de la categoría y insertando dentro de la tabla gameSentence cada uno de los ids de las oraciones y el id del juego actual.
+      catId el id de la categoría del juego actual en el que se va a jugar
+      numPhra el numero de oraciones que va a tener el juego actual
+      curgame el id del juego actual
+     */
 
     public function startGame($catId, $numPhra, $curgame) {
         $sentence = new Sentence();

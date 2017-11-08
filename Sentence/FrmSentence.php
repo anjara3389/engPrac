@@ -30,6 +30,7 @@ $category = new Category();
                         alert('Escriba oración en español');
                         return;
                     }
+                     $("#sentForm").submit();
                 });
             });
 
@@ -37,7 +38,7 @@ $category = new Category();
         </script>
     </head>
     <body>
-        <form action=<?php
+        <form id="sentForm" name="sentForm" action=<?php
         if ($isNew) {
             echo "./Sentence.php?funcSe=insert";
         } else {
@@ -63,7 +64,7 @@ $category = new Category();
             </div>
             <br>
             <br>
-            <button id="ok" name="ok" type="submit" class="btn btn-default">Guardar</button>
+            <button id="ok" name="ok" type="button" class="btn btn-default">Guardar</button>
         </form>
     </body>
 </html>
