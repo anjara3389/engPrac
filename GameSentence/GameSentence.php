@@ -42,7 +42,7 @@ class GameSentence {
         }
         return $result;
     }
-
+    //retorna el siguiente turno de la partida. El siguiente turno de la partida es el siguiente en el que is_right(la respuesta de si está bien o mal) es nulo
     public function getNextGameSentence($gameId) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "SELECT gss.id,gss.game_id,gss.sentence_id FROM game_sentence gss WHERE gss.id= (SELECT MIN(gs.id) "
@@ -54,8 +54,8 @@ class GameSentence {
         $gameSent->setPars($row[0], $row[1], $row[2], null);
         return $gameSent;
     }
-
-    public function setResult($gameId, $right) { //cambia a bien o mal
+     //Cambia el resultado de un turno dentro de una partida a bien o mal
+    public function setResult($gameId, $right) {
         $connect = new DBConnect();
         $nextGS = $this->getNextGameSentence($gameId);
         $result = pg_query($connect->getDB(), "UPDATE game_sentence SET is_right = " . $right . " WHERE id = " . $nextGS->id);
@@ -64,7 +64,7 @@ class GameSentence {
             exit;
         }
     }
-
+    
     public function getPunctuation($gameId) {
         $connect = new DBConnect();
         $result = pg_query($connect->getDB(), "SELECT COUNT(*),(SELECT COUNT(*) "

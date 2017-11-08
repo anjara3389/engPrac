@@ -7,7 +7,6 @@ $game = new Game();
 $currGame = $_GET['gameId'];
 $numPhra = $_GET['numPhra'];
 
-
 $gameSenten = new GameSentence();
 $nextGameSent = $gameSenten->getNextGameSentence($currGame);
 $sent = new Sentence();
@@ -32,18 +31,7 @@ $nextSentence = $sent->getDataToEdit($nextGameSent->sentenceId);
                         type: 'post',
                         dataType: 'json',
                         success: function (data) {
-                            $('#nextQuest').val(data.nextQue);
-                            $('#spani').html(data.spanish);
-                            $('#engls').html(data.english);
-                            $('#numPhra').val(data.numP);
-                            $("#btnRight").attr("disabled", "disabled");
-                            $("#btnWrong").attr("disabled", "disabled");
-                            $("#engls").hide();
-                            if ($("#numPhra").val() == 0) {
-                                alert("Fin del Juego \n \n Puntuación: \n \n" + data.rightAns + " de " + data.total);
-                                $("#btnAns").attr("disabled", "disabled");
-
-                            }
+                            changeData(data);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert("Error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
@@ -63,18 +51,7 @@ $nextSentence = $sent->getDataToEdit($nextGameSent->sentenceId);
                         type: 'post',
                         dataType: 'json',
                         success: function (data) {
-                            $('#nextQuest').val(data.nextQue);
-                            $('#spani').html(data.spanish);
-                            $('#engls').html(data.english);
-                            $('#numPhra').val(data.numP);
-
-                            $("#btnRight").attr("disabled", "disabled");
-                            $("#btnWrong").attr("disabled", "disabled");
-                            $("#engls").hide();
-                            if ($("#numPhra").val() == 0) {
-                                alert("FIN DEL JUEGO \n \n Puntuación: \n \n" + data.rightAns + " de " + data.total);
-                                $("#btnAns").attr("disabled", "disabled");
-                            }
+                            changeData(data);
                         }, error: function (jqXHR, textStatus, errorThrown) {
                             alert("Error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
                         },
@@ -86,6 +63,19 @@ $nextSentence = $sent->getDataToEdit($nextGameSent->sentenceId);
                     $("#btnRight").removeAttr("disabled");
                     $("#btnWrong").removeAttr("disabled");
                 });
+                function changeData(data) {
+                    $('#nextQuest').val(data.nextQue);
+                    $('#spani').html(data.spanish);
+                    $('#engls').html(data.english);
+                    $('#numPhra').val(data.numP);
+                    $("#btnRight").attr("disabled", "disabled");
+                    $("#btnWrong").attr("disabled", "disabled");
+                    $("#engls").hide();
+                    if ($("#numPhra").val() == 0) {
+                        alert("Fin del Juego \n \n Puntuación: \n \n" + data.rightAns + " de " + data.total);
+                        $("#btnAns").attr("disabled", "disabled");
+                    }
+                }
             });
 
 

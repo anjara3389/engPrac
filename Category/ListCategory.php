@@ -10,7 +10,7 @@ $categories = $categ->select(false);
         <div class="container">
             <h2>Categorías</h2>
             <br>
-            <a class="btn btn-default" href="./FrmCategory.php">Nueva</a>
+            <a class="btn btn-default" href="./FrmCategory.php"><span class='glyphicon glyphicon-plus'></span> Nueva</a>
             <br>
             <br>
             <table name="tableCat" id="tableCat" class="table table-striped">
@@ -26,7 +26,7 @@ $categories = $categ->select(false);
                             $category = $categories[$i];
                             $id = $category->id;
                             $name = $category->name;
-                            echo "<tr><td>$name</td><td><a href='../Sentence/ListSentences.php?categ=$id'>Oraciones</a></td><td><a href='./FrmCategory.php?id=$id'>Editar</a></td><td><a id='del' name='del' onclick='javascript:deleteConfirmation($id);'>Eliminar</a></td></tr>";
+                            echo "<tr><td>$name</td><td><a href='../Sentence/ListSentences.php?categ=$id'><span class='glyphicon glyphicon-th-list'></span> Oraciones</a></td><td><a href='./FrmCategory.php?id=$id'><span class='glyphicon glyphicon-pencil'></span> Editar</a></td><td><a id='del' name='del' onclick='javascript:deleteConfirmation($id);'><span class='glyphicon glyphicon-remove'></span> Eliminar</a></td></tr>";
                         }
                     }
                     ?>

@@ -9,7 +9,7 @@ if (isset($_GET['funcSe'])) {
         if (strcmp($func, "del") == 0) {//elimnar
             $id = $_GET['id'];
             $catId = $_GET['cat'];
-            $sentence->delete($id);
+            $sentence->delete($id, null);
         } else if (strcmp($func, "insert") == 0) {//insertar
             $english = $_POST['english'];
             $spanish = $_POST['spanish'];
@@ -46,7 +46,7 @@ class Sentence {
 
     public function select($idCat) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "SELECT id,english,spanish,category_id FROM sentence WHERE category_id=$idCat");
+        $result = pg_query($connect->getDB(), "SELECT id,english,spanish,category_id FROM sentence WHERE category_id=$idCat and active");
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;
@@ -63,7 +63,7 @@ class Sentence {
             $num++;
         }if (isset($sentences)) {
             return $sentences;
-        } 
+        }
     }
 
     public function selectRamdomlyByCat($idCat, $numPhra) {
@@ -105,9 +105,9 @@ class Sentence {
         return $sentence;
     }
 
-    public function delete($idD) {
+    public function delete($idSent, $idCat) {
         $connect = new DBConnect();
-        $result = pg_query($connect->getDB(), "DELETE FROM sentence WHERE id=" . $idD);
+        $result = pg_query($connect->getDB(), "UPDATE sentence SET active=false WHERE " . ($idCat == null ? " id=" . $idSent : " category_id=" . $idCat));
         if (!$result) {
             echo "Ha ocurrido un error.\n";
             exit;

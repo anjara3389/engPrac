@@ -73,7 +73,7 @@ $categories = $category->select(true);
             <h2>Nuevo juego</h2>
             <br>
             <br>
-            <div class="form-group">
+            <div class="form-group" >
                 <label for="cat">Categoría</label>
                 <select name="cat" id="cat" class="form-control">
                     <?php for ($i = 0; $i < count($categories); $i++) { ?>
