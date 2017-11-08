@@ -1,5 +1,6 @@
 <?php
 
+//funciona al ejecutar el ajax de la clase FrmGame. Recibe id de categoría envía como json el número de oraciones
 include("../Category/Category.php");
 $catId = "";
 if (isset($_POST['categ'])) {

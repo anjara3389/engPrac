@@ -21,7 +21,7 @@ $nextSentence = $sent->getDataToEdit($nextGameSent->sentenceId);
                 $("#btnRight").attr("disabled", "disabled");
                 $("#btnWrong").attr("disabled", "disabled");
                 $("#btnRight").click(function () {
-                    var req = {
+                    var req = {//envía estos parámetros a nextQuestion.php
                         gameId: $("#currGame").val(),
                         right: "true",
                         numPhra: $("#numPhra").val()
@@ -30,8 +30,8 @@ $nextSentence = $sent->getDataToEdit($nextGameSent->sentenceId);
                         url: 'nextQuestion.php',
                         type: 'post',
                         dataType: 'json',
-                        success: function (data) {
-                            changeData(data);
+                        success: function (data) { //vuelve con datos en data
+                            changeData(data); //usa función para cambiar valores según los datos de data
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert("Error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
@@ -63,6 +63,7 @@ $nextSentence = $sent->getDataToEdit($nextGameSent->sentenceId);
                     $("#btnRight").removeAttr("disabled");
                     $("#btnWrong").removeAttr("disabled");
                 });
+
                 function changeData(data) {
                     $('#nextQuest').val(data.nextQue);
                     $('#spani').html(data.spanish);

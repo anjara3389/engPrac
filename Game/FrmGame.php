@@ -12,15 +12,15 @@ $categories = $category->select(true);
         <script>
             $(document).ready(function () {
                 var req = {
-                    categ: $("#cat").val(),
+                    categ: $("#cat").val(),//envía este parámetro a getNumSentByCat.php
                 }
 
                 $.ajax({
                     url: 'getNumSentByCat.php',
                     type: 'post',
                     dataType: 'json',
-                    success: function (data) {
-                        $('#maxi').html(data.numSent);
+                    success: function (data) {//recibe numero de oraciones de la categoría dada y cambia cosas con eso
+                        $('#maxi').html(data.numSent); 
                         $('#numPhra').attr(data.numSent);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
