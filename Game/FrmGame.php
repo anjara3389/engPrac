@@ -12,7 +12,7 @@ $categories = $category->select(true);
         <script>
             $(document).ready(function () {
                 var req = {
-                    categ: $("#cat").val(),//envía este parámetro a getNumSentByCat.php
+                    categ: $("#cat").val(),//envía este parámetro a getNumSentByCat.php **
                 }
 
                 $.ajax({
